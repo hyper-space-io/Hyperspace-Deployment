@@ -20,7 +20,7 @@ spec:
       sources:
         - chart: hyperspace
           path: hyperspace
-          repoURL: "{{ .Values.ECR_REPO }}"
+          repoURL: "{{ .Values.ECR_REGISTRY }}"
           targetRevision: '{{`{{targetRevision}}`}}'
           helm:
             valueFiles: 
