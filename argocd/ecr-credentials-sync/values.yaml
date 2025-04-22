@@ -1,0 +1,3 @@
+region: hyperspace-region
+account_id: "hyperspace-account-id"
+ECR_REGISTRY: hyperspace-account-id.dkr.ecr.hyperspace-region.amazonaws.com

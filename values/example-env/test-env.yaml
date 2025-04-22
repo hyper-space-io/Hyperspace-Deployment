@@ -1,0 +1,76 @@
+global:
+  environment: example-env
+  project: example-env
+  ecr_repository: hyperspace-account-id.dkr.ecr.hyperspace-region.amazonaws.com
+
+data-node:
+  replicaCount: 1
+  image:
+    pullPolicy: IfNotPresent
+  config:
+    load_afi: true
+    log_level: DEBUG
+    restore: true
+    save_backup: true
+    restore_doc_values: true
+    load_at_timeout: true
+    save_backup_s3: false
+    restore_from_rocksdb: false
+    query_timeout: 10000
+  ebsVolume:
+    enabled: true
+  priorityClass:
+    enabled: true
+    deployment:
+      replicaCount: 0
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::customer-account-id:role/role-name
+  hugePages:
+    enabled: true
+    numOfHugePages: 1
+    reduceOsHugePages: true
+  livenessProbe:
+    failureThreshold: 40
+    periodSeconds: 180
+  readinessProbe:
+    failureThreshold: 720
+    periodSeconds: 10
+  startupProbe:
+    failureThreshold: 720
+    periodSeconds: 10
+
+realtime-compiler:
+  replicaCount: 1
+  image:
+    pullPolicy: IfNotPresent
+  config:
+    log_level: DEBUG
+
+search-master:
+  replicaCount: 1
+  image:
+    pullPolicy: IfNotPresent
+  config:
+    log_level: DEBUG
+    restore: false
+    commit_timeout: 120000
+  ingress:
+    className: nginx-internal
+    hosts:
+      - host: example-env.your-domain.com
+        paths:
+          - path: /
+            pathType: Prefix
+
+scoring:
+  replicaCount: 0
+
+etcd:
+  fullnameOverride: etcd-example-env
+
+backup:
+  daily:
+    enabled: true
+  hourly:
+    enabled: true
