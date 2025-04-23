@@ -16,7 +16,6 @@ spec:
     - group: "*"
       kind: "*"
   roles:
-  # Admin role for dev team
     - name: admin
       description: admin role on the project
       policies:
@@ -26,4 +25,4 @@ spec:
         - p, proj:{{ .Values.environment }}:admin, repositories, delete, {{ .Values.environment }}/*, allow
         - p, proj:{{ .Values.environment }}:admin, repositories, update, {{ .Values.environment }}/*, allow
       groups:
-        - hyper-space-io:Argo-Production-Access
+        - {{ .Values.ORG_NAME }}:{{ .Values.ADMIN_GROUP }}

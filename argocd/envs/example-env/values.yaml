@@ -1,0 +1,5 @@
+ECR_REGISTRY: hyperspace-account-id.dkr.ecr.hyperspace-region.amazonaws.com
+Deployment_Repo: Hyperspace-Deployment
+ORG_NAME: hyper-space-io
+ADMIN_GROUP: example-admin-group
+environment: example-env

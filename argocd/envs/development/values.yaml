@@ -1,5 +1,0 @@
-ECR_REGISTRY: 418316469434.dkr.ecr.eu-west-1.amazonaws.com
-ORG_NAME: hyper-space-io
-Deployment_Repo: Hyperspace-Deployment
-ADMIN_GROUP: 
-environment: development

@@ -6,7 +6,7 @@ spec:
   generators:
   - list:
       elements:
-      - name: test
+      - name: example
         targetRevision: 1.1.180
   template:
     metadata:
@@ -24,14 +24,11 @@ spec:
           targetRevision: '{{`{{targetRevision}}`}}'
           helm:
             valueFiles: 
-              - $values/argocd/conf-files/{{ .Values.environment }}/{{`{{name}}`}}.yaml
+              - $values/values/{{ .Values.environment }}/{{`{{name}}`}}.yaml
         - repoURL: https://github.com/{{ .Values.ORG_NAME }}/{{ .Values.Deployment_Repo }}.git
           targetRevision: master
           ref: values
       syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
         syncOptions:
           - RespectIgnoreDifferences=true
           - CreateNamespace=true
