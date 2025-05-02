@@ -1,0 +1,3 @@
+region: eu-west-1
+account_id: "HYPERSPACE_ACCOUNT_ID"
+ECR_REGISTRY: HYPERSPACE_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com

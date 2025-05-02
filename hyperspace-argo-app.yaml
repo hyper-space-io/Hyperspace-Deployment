@@ -1,0 +1,112 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: example-env
+  namespace: argocd
+spec: 
+  generators:
+  - list:
+      elements: 
+        - name: example-env
+          targetRevision: 2.0.165
+  template:
+    metadata:
+      name: 'hyperspace-seed-{{name}}'
+      namespace: argocd
+    spec:
+      destination:
+        namespace: '{{name}}'
+        server: https://kubernetes.default.svc
+      project: default
+      sources:
+        - chart: hyperspace
+          path: hyperspace
+          repoURL: "HYPERSPACE_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com"
+          targetRevision: '{{targetRevision}}'
+          helm:
+            values: |
+              global:
+                environment: example-env
+                ecr_repository: HYPERSPACE_ACCOUNT_ID.dkr.ecr.eu-central-1.amazonaws.com
+            
+              data-node:
+                replicaCount: 1
+                image:
+                  pullPolicy: IfNotPresent
+                config:
+                  load_afi: true
+                  log_level: DEBUG
+                  restore: false
+                  restore_doc_values: false
+                  save_backup: true
+                  load_at_timeout: true
+                  save_backup_s3: false
+                  restore_from_rocksdb: false
+                  query_timeout: 10000
+                ebsVolume:
+                  enabled: true
+                priorityClass:
+                  enabled: true
+                  deployment:
+                    replicaCount: 0
+                serviceAccount:
+                  annotations:
+                    eks.amazonaws.com/role-arn: data-node-hyperspace-example-env-20250502131917246300000008 # Replace with the correct role ARN
+                hugePages:
+                  enabled: true
+                  numOfHugePages: 1
+                  reduceOsHugePages: true
+                livenessProbe:
+                  failureThreshold: 40
+                  periodSeconds: 180
+                readinessProbe:
+                  failureThreshold: 720
+                  periodSeconds: 10
+                startupProbe:
+                  failureThreshold: 720
+                  periodSeconds: 10
+
+              realtime-compiler:
+                replicaCount: 1
+                image:
+                  pullPolicy: IfNotPresent
+                config:
+                  log_level: DEBUG
+
+              search-master:
+                replicaCount: 1
+                image:
+                  pullPolicy: IfNotPresent
+                config:
+                  log_level: DEBUG
+                  restore: false
+                  commit_timeout: 120000
+
+                ingress:
+                  className: nginx-internal
+                  hosts:
+                    - host: search-master.<example-env>.<domain.com> # Replace with the correct domain and subdomain
+                      paths:
+                        - path: /
+                          pathType: Prefix
+
+              etcd:
+                fullnameOverride: etcd-example-env
+
+              backup:
+                daily:
+                  enabled: true
+                hourly:
+                  enabled: true
+      syncPolicy:
+        syncOptions:
+          - RespectIgnoreDifferences=true
+          - CreateNamespace=true
+      ignoreDifferences:
+        - kind: Secret
+          jsonPointers:
+          - /data
+        - kind: StatefulSet
+          group: apps
+          jqPathExpressions:
+          - .spec.template.metadata.annotations["checksum/token-secret"]
