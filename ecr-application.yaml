@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: example-env
+  name: ecr-credentials-sync
   namespace: argocd
 spec:
   destination:
     namespace: argocd
     server: https://kubernetes.default.svc
-  project: example-env
+  project: default
   source:
-    repoURL: https://github.com/hyper-space-io/Hyperspace-Deployment.git
-    targetRevision: master
-    path: argocd/envs/example-env
+    repoURL: https://github.com/<org>/<repo>.git
+    targetRevision: main
+    path: argocd/ecr-credentials-sync
