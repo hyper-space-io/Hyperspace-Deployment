@@ -36,8 +36,8 @@ spec:
                 config:
                   load_afi: true
                   log_level: DEBUG
-                  restore: false
-                  restore_doc_values: false
+                  restore: true
+                  restore_doc_values: true
                   save_backup: true
                   load_at_timeout: true
                   save_backup_s3: false
