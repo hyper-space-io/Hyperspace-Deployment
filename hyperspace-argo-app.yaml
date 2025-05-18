@@ -8,7 +8,7 @@ spec:
   - list:
       elements: 
         - name: example-env
-          targetRevision: 2.0.165
+          targetRevision: 2.0.181
   template:
     metadata:
       name: 'hyperspace-seed-{{name}}'
@@ -51,7 +51,7 @@ spec:
                     replicaCount: 0
                 serviceAccount:
                   annotations:
-                    eks.amazonaws.com/role-arn: data-node-hyperspace-example-env-20250502131917246300000008 # Replace with the correct role ARN
+                    eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_ID:role/<PROJECT>-<ENVIRONMENT>-EC2TagsPolicy # Replace with the correct role ARN
                 hugePages:
                   enabled: true
                   numOfHugePages: 1
@@ -95,9 +95,9 @@ spec:
 
               backup:
                 daily:
-                  enabled: true
+                  enabled: false
                 hourly:
-                  enabled: true
+                  enabled: false
       syncPolicy:
         syncOptions:
           - RespectIgnoreDifferences=true
