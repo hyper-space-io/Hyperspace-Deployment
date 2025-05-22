@@ -1,0 +1,15 @@
+# Environment Configuration
+hyperspace_account_id: ""
+
+# Repository Configuration
+vcsRepository: "https://github.com/<ORG>/<REPO>.git"
+# vcsRepository: https://gitlab.com/<ORG>/<REPO>.git"
+
+# Sync Policy Configuration
+syncPolicy:
+  automated:
+    prune: true
+    selfHeal: true
+  syncOptions:
+    - RespectIgnoreDifferences=true
+    - CreateNamespace=true

@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ecr-credentials-sync
+  name: example-env
   namespace: argocd
 spec:
   destination:
@@ -9,6 +9,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://github.com/<org>/<repo>.git
-    targetRevision: main
-    path: argocd/ecr-credentials-sync
+    repoURL: https://github.com/<ORG>/<REPO>.git
+    # repoURL: https://gitlab.com/<ORG>/<REPO>.git
+    targetRevision: master
+    path: argocd/envs/example-env

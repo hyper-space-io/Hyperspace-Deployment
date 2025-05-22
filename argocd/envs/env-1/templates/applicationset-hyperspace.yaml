@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: hyperspace-{{ .Values.environment }}
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+        - name: env-1
+          targetRevision: 2.0.181
+  template:
+    metadata:
+      name: 'hyperspace-{{name}}'
+      namespace: argocd
+    spec:
+      destination:
+        namespace: '{{name}}'
+        server: https://kubernetes.default.svc
+      project: default
+      sources:
+        - chart: hyperspace
+          path: hyperspace
+          repoURL: {{ .Values.hyperspace_account_id }}.dkr.ecr.eu-central-1.amazonaws.com
+          targetRevision: '{{targetRevision}}'
+          helm:
+            valueFiles:
+              - $values/values/{{ .Values.environment }}/{{name}}.yaml
+        - repoURL: {{ .Values.vcsRepository }}
+          targetRevision: main
+          ref: values
+      syncPolicy:
+        {{- toYaml .Values.syncPolicy | nindent 8 }}
+      ignoreDifferences:
+        - kind: Secret
+          jsonPointers:
+          - /data
+        - kind: StatefulSet
+          group: apps
+          jqPathExpressions:
+          - .spec.template.metadata.annotations["checksum/token-secret"]
