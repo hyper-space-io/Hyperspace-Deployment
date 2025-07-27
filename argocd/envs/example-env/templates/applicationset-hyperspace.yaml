@@ -17,7 +17,7 @@ spec:
       destination:
         namespace: '{{name}}'
         server: https://kubernetes.default.svc
-      project: default
+      project: {{ .Values.environment }}
       sources:
         - chart: hyperspace
           path: hyperspace
@@ -27,7 +27,7 @@ spec:
             valueFiles:
               - $values/values/{{ .Values.environment }}/{{name}}.yaml
         - repoURL: {{ .Values.vcsRepository }}
-          targetRevision: main
+          targetRevision: master
           ref: values
       syncPolicy:
         {{- toYaml .Values.syncPolicy | nindent 8 }}
