@@ -10,6 +10,5 @@ spec:
   project: default
   source:
     repoURL: https://github.com/<ORG>/<REPO>.git
-    # repoURL: https://gitlab.com/<ORG>/<REPO>.git
     targetRevision: master
     path: argocd/envs/example-env
